@@ -849,15 +849,15 @@
         </div>
 
         <div class="quick-actions">
-          <button class="shortcut-btn" data-goto="retirada" type="button">
+          <button class="shortcut-btn" data-goto="retirada" onclick="return window.forceNavegarTab && window.forceNavegarTab('retirada')" type="button">
             <div class="shortcut-icon">📦</div>
             <div><strong>Solicitar retirada</strong><span>Pacotes que precisam sair da rota ou voltar para tratativa.</span></div>
           </button>
-          <button class="shortcut-btn" data-goto="ambulancia" type="button">
+          <button class="shortcut-btn" data-goto="ambulancia" onclick="return window.forceNavegarTab && window.forceNavegarTab('ambulancia')" type="button">
             <div class="shortcut-icon">🚑</div>
             <div><strong>Solicitar ambulância</strong><span>Apoio operacional, abertura e status da solicitação.</span></div>
           </button>
-          <button class="shortcut-btn" data-goto="scheduling" type="button">
+          <button class="shortcut-btn" data-goto="scheduling" onclick="return window.forceNavegarTab && window.forceNavegarTab('scheduling')" type="button">
             <div class="shortcut-icon">🗓️</div>
             <div><strong>Ajuste de scheduling</strong><span>Pedido para o Mercado Livre adicionar veículos no sistema.</span></div>
           </button>
@@ -1055,6 +1055,7 @@
       <label>Nome do dispatcher<input id="inputUsuario" placeholder="Ex: Edinan"></label>
       <div class="btn-grid">
         <button class="primary-btn" id="btnSalvarUsuario" type="button">Entrar no sistema</button>
+        <button class="ghost-btn" id="btnPularUsuario" type="button">Pular por enquanto</button>
       </div>
     </div>
   </div>
@@ -1511,7 +1512,17 @@
 
     function initEvents(){
       qsa('.nav-btn').forEach(b => b.addEventListener('click', () => navegar(b.dataset.tab)));
-      qsa('[data-goto]').forEach(b => b.addEventListener('click', () => navegar(b.dataset.goto)));
+      qsa('[data-goto]').forEach(b => b.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        navegar(b.dataset.goto);
+      }));
+      document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-goto]');
+        if(!trigger) return;
+        event.preventDefault();
+        navegar(trigger.dataset.goto);
+      });
 
       $('btnTrocarUsuario').onclick = () => { setVal('inputUsuario', state.usuario); $('modalUsuario').classList.add('show'); };
       $('btnSalvarUsuario').onclick = () => {
@@ -1569,5 +1580,56 @@
       renderAll();
     });
   </script>
+  <script>
+    /* Correção robusta de navegação mobile: funciona mesmo se algum listener anterior falhar */
+    (function(){
+      function hojeISOFix(){
+        const now = new Date();
+        const tzOffset = now.getTimezoneOffset() * 60000;
+        return new Date(now.getTime() - tzOffset).toISOString().slice(0,10);
+      }
+      window.forceNavegarTab = function(tab){
+        const destino = document.getElementById('tab-' + tab);
+        if(!destino) return false;
+        if(tab === 'retirada'){
+          const data = document.getElementById('retData');
+          if(data && !data.value) data.value = hojeISOFix();
+        }
+        document.querySelectorAll('.section').forEach(function(sec){ sec.classList.remove('active'); });
+        document.querySelectorAll('.nav-btn').forEach(function(btn){ btn.classList.remove('active'); });
+        destino.classList.add('active');
+        const nav = document.querySelector('.nav-btn[data-tab="' + tab + '"]');
+        if(nav) nav.classList.add('active');
+        try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
+        if(typeof window.renderAll === 'function') window.renderAll();
+        return false;
+      };
+      function bindFix(){
+        document.querySelectorAll('[data-goto]').forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            window.forceNavegarTab(btn.getAttribute('data-goto'));
+          }, true);
+        });
+        document.querySelectorAll('.nav-btn[data-tab]').forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.preventDefault();
+            window.forceNavegarTab(btn.getAttribute('data-tab'));
+          }, true);
+        });
+        var pular = document.getElementById('btnPularUsuario');
+        if(pular){
+          pular.addEventListener('click', function(){
+            var modal = document.getElementById('modalUsuario');
+            if(modal) modal.classList.remove('show');
+          });
+        }
+      }
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindFix);
+      else bindFix();
+    })();
+  </script>
+
 </body>
 </html>
