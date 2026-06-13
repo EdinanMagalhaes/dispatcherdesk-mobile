@@ -1,12 +1,12 @@
 {
   "name": "DispatcherDesk Mobile Expedição",
-  "short_name": "DD Expedição",
-  "description": "Ferramenta mobile para solicitações de retirada, ambulância e scheduling.",
+  "short_name": "DispatcherDesk",
+  "description": "Ferramenta mobile para solicitações rápidas de expedição CoopMetro.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#052d21",
-  "theme_color": "#063d2c",
+  "theme_color": "#052d21",
   "orientation": "portrait",
   "icons": [
     {
