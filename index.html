@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#063d2c" />
+  <title>DispatcherDesk Mobile • Expedição</title>
+  <link rel="icon" href="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%23063d2c'/%3E%3Ccircle cx='64' cy='64' r='42' fill='%230a9b65'/%3E%3Cpath d='M36 68h56l-12-18h-28z' fill='%23fff'/%3E%3Ccircle cx='50' cy='82' r='8' fill='%23063d2c'/%3E%3Ccircle cx='82' cy='82' r='8' fill='%23063d2c'/%3E%3C/svg%3E" type="image/svg+xml" />
+  <style>
+    :root{
+      --green-950:#052d21;
+      --green-900:#063d2c;
+      --green-800:#07543b;
+      --green-700:#08764e;
+      --green-600:#0a9b65;
+      --green-500:#12b977;
+      --green-100:#e7f8ef;
+      --green-50:#f5fbf8;
+      --white:#ffffff;
+      --text:#14221b;
+      --muted:#66766d;
+      --line:#dce9e2;
+      --danger:#b42318;
+      --warning:#b54708;
+      --blue:#175cd3;
+      --shadow:0 18px 46px rgba(6,61,44,.14);
+      --shadow-soft:0 10px 28px rgba(6,61,44,.08);
+      --radius-xl:28px;
+      --radius-lg:20px;
+      --bottom-nav:86px;
+    }
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 0% 0%,rgba(18,185,119,.16),transparent 30%),
+        radial-gradient(circle at 100% 0%,rgba(6,61,44,.12),transparent 28%),
+        linear-gradient(145deg,#fbfffd 0%,#eef8f3 52%,#ffffff 100%);
+      overflow-x:hidden;
+    }
+
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+
+    .app{
+      width:100%;
+      max-width:520px;
+      min-height:100vh;
+      margin:0 auto;
+      padding:14px 14px calc(var(--bottom-nav) + env(safe-area-inset-bottom) + 18px);
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px 0 12px;
+      backdrop-filter:blur(18px);
+    }
+
+    .brand-mini{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:17px;
+      background:linear-gradient(135deg,var(--green-900),var(--green-500));
+      box-shadow:0 12px 28px rgba(8,118,78,.25);
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-size:23px;
+      flex:0 0 46px;
+    }
+
+    .brand-title{min-width:0}
+    .brand-title strong{
+      display:block;
+      color:var(--green-900);
+      font-size:16px;
+      letter-spacing:-.04em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-title span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:850;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .user-chip{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.84);
+      color:var(--green-900);
+      border-radius:999px;
+      padding:8px 10px;
+      max-width:152px;
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      font-weight:950;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .hero-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:30px;
+      padding:24px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--green-950),var(--green-700));
+      box-shadow:var(--shadow);
+      margin:4px 0 14px;
+    }
+
+    .hero-card:after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:999px;
+      right:-85px;
+      top:-92px;
+      border:38px solid rgba(255,255,255,.08);
+    }
+
+    .eyebrow{
+      position:relative;
+      z-index:1;
+      display:block;
+      color:rgba(255,255,255,.72);
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:10px;
+      font-weight:950;
+      margin-bottom:8px;
+    }
+
+    .hero-card h1,.page-title h2{
+      position:relative;
+      z-index:1;
+      margin:0;
+      line-height:.98;
+      letter-spacing:-.065em;
+    }
+
+    .hero-card h1{font-size:36px;max-width:280px}
+
+    .hero-card p{
+      position:relative;
+      z-index:1;
+      margin:12px 0 0;
+      color:rgba(255,255,255,.78);
+      line-height:1.5;
+      font-size:14px;
+      font-weight:650;
+      max-width:360px;
+    }
+
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin:14px 0;
+    }
+
+    .shortcut-btn{
+      width:100%;
+      border:1px solid rgba(8,118,78,.12);
+      border-radius:22px;
+      background:rgba(255,255,255,.92);
+      box-shadow:var(--shadow-soft);
+      padding:16px;
+      display:flex;
+      align-items:center;
+      gap:13px;
+      text-align:left;
+      color:var(--green-900);
+    }
+
+    .shortcut-icon{
+      width:48px;
+      height:48px;
+      border-radius:18px;
+      background:var(--green-100);
+      color:var(--green-800);
+      display:grid;
+      place-items:center;
+      font-size:22px;
+      flex:0 0 48px;
+    }
+
+    .shortcut-btn strong{display:block;font-size:15px;margin-bottom:3px;letter-spacing:-.02em}
+    .shortcut-btn span{display:block;color:var(--muted);font-size:12px;font-weight:750;line-height:1.35}
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin:12px 0 14px;
+    }
+
+    .stat-card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,var(--green-50));
+      border-radius:22px;
+      padding:15px;
+      box-shadow:var(--shadow-soft);
+      min-height:104px;
+    }
+
+    .stat-card small{
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .stat-card strong{
+      display:block;
+      color:var(--green-900);
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-.07em;
+    }
+
+    .stat-card span{
+      display:block;
+      color:#53665c;
+      font-size:11px;
+      font-weight:800;
+      line-height:1.3;
+      margin-top:8px;
+    }
+
+    .section{display:none;animation:fadeIn .16s ease}
+    .section.active{display:block}
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+    .page-title{
+      display:grid;
+      gap:8px;
+      margin:6px 0 14px;
+    }
+
+    .page-title h2{
+      color:var(--green-900);
+      font-size:31px;
+    }
+
+    .page-title p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:650;
+      line-height:1.45;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.92);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:14px;
+      backdrop-filter:blur(14px);
+    }
+
+    .card-title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .card-title h3{
+      margin:0;
+      color:var(--green-900);
+      font-size:18px;
+      letter-spacing:-.04em;
+    }
+
+    .card-title span{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:850;
+      line-height:1.35;
+    }
+
+    .form-grid{display:grid;gap:12px}
+
+
+    .vehicle-list{display:grid;gap:12px}
+    .vehicle-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:12px;
+      background:linear-gradient(180deg,#fff,var(--green-50));
+      box-shadow:var(--shadow-soft);
+      display:grid;
+      gap:10px;
+    }
+    .vehicle-card-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--green-900);
+      font-weight:950;
+      font-size:13px;
+    }
+    .vehicle-remove{
+      border:1px solid #ffd6d6;
+      background:#fff0f0;
+      color:var(--danger);
+      border-radius:12px;
+      min-height:36px;
+      padding:0 10px;
+      font-weight:950;
+      font-size:12px;
+    }
+    .vehicle-help{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    label{
+      display:grid;
+      gap:7px;
+      color:#102439;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid #cdd9e5;
+      border-radius:16px;
+      padding:14px 14px;
+      color:#1f2937;
+      background:#fff;
+      outline:none;
+      transition:.18s ease;
+      font-weight:650;
+      min-height:48px;
+    }
+
+    textarea{resize:vertical;min-height:98px;line-height:1.45}
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--green-600);
+      box-shadow:0 0 0 4px rgba(10,155,101,.12);
+      background:#fff;
+    }
+
+    .row-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .switch-tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      background:var(--green-50);
+      border:1px solid var(--line);
+      padding:5px;
+      border-radius:18px;
+      margin-bottom:12px;
+    }
+
+    .switch-tabs button{
+      border:0;
+      border-radius:14px;
+      padding:12px 10px;
+      background:transparent;
+      color:var(--green-800);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .switch-tabs button.active{
+      background:linear-gradient(135deg,var(--green-900),var(--green-600));
+      color:#fff;
+      box-shadow:0 10px 22px rgba(8,118,78,.18);
+    }
+
+    .btn-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .btn-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    .primary-btn,.ghost-btn,.danger-btn,.warn-btn,.blue-btn{
+      border-radius:17px;
+      border:0;
+      min-height:52px;
+      padding:13px 14px;
+      font-weight:950;
+      font-size:14px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .primary-btn{background:linear-gradient(135deg,var(--green-900),var(--green-500));color:#fff}
+    .ghost-btn{background:#fff;color:var(--green-900);border:1px solid var(--line)}
+    .danger-btn{background:#fff0f0;color:var(--danger);border:1px solid #ffd6d6}
+    .warn-btn{background:#fff4e5;color:var(--warning);border:1px solid #fedf89}
+    .blue-btn{background:#eff4ff;color:var(--blue);border:1px solid #c7d7fe}
+
+    .preview-box{
+      width:100%;
+      min-height:240px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+      color:#24352d;
+      background:linear-gradient(180deg,#fff,#f8fcfa);
+      font-family:Consolas,Monaco,"Courier New",monospace;
+      font-size:12px;
+      line-height:1.55;
+      white-space:pre-wrap;
+      overflow:auto;
+    }
+
+    .latest-list,.history-list{display:grid;gap:10px}
+
+    .empty-state{
+      border:1px dashed var(--line);
+      border-radius:20px;
+      padding:18px;
+      text-align:center;
+      color:var(--muted);
+      background:var(--green-50);
+      font-size:13px;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .record-card{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:linear-gradient(180deg,#fff,#f9fffb);
+      box-shadow:var(--shadow-soft);
+      padding:14px;
+      display:grid;
+      gap:11px;
+    }
+
+    .record-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .record-head strong{
+      display:block;
+      color:var(--green-900);
+      font-size:15px;
+      letter-spacing:-.03em;
+      margin-bottom:3px;
+    }
+
+    .record-head span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+    .badge{
+      display:inline-flex;
+      width:fit-content;
+      padding:7px 9px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:950;
+      white-space:nowrap;
+      background:var(--green-100);
+      color:var(--green-800);
+    }
+
+    .badge.pending{background:#fff4e5;color:var(--warning)}
+    .badge.denied{background:#fff0f0;color:var(--danger)}
+    .badge.done{background:var(--green-100);color:var(--green-800)}
+    .badge.blue{background:#eff4ff;color:var(--blue)}
+
+    .record-mini-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .record-info{
+      background:var(--green-50);
+      border-radius:14px;
+      padding:10px;
+      min-width:0;
+    }
+
+    .record-info small{
+      display:block;
+      color:var(--muted);
+      font-weight:900;
+      font-size:10px;
+      margin-bottom:4px;
+    }
+
+    .record-info span{
+      display:block;
+      color:var(--green-900);
+      font-weight:950;
+      font-size:12px;
+      overflow-wrap:anywhere;
+    }
+
+    .record-message{
+      max-height:130px;
+      overflow:auto;
+      white-space:pre-wrap;
+      font-family:Consolas,Monaco,"Courier New",monospace;
+      font-size:11px;
+      line-height:1.48;
+      color:#24352d;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:11px;
+    }
+
+    .record-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .small-btn{
+      min-height:42px;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:#fff;
+      color:var(--green-900);
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .small-btn.danger{color:var(--danger);background:#fff7f7;border-color:#ffd6d6}
+    .small-btn.dark{color:#fff;background:var(--green-900);border-color:var(--green-900)}
+    .small-btn.warn{color:var(--warning);background:#fffaf2;border-color:#fedf89}
+
+    .filters{display:grid;gap:10px;margin-bottom:12px}
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      z-index:60;
+      background:rgba(6,61,44,.52);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .modal-overlay.show{display:flex}
+
+    .modal{
+      width:min(440px,100%);
+      background:#fff;
+      border-radius:30px;
+      padding:22px;
+      box-shadow:0 30px 90px rgba(0,0,0,.28);
+      max-height:calc(100vh - 36px);
+      overflow:auto;
+    }
+
+    .modal h3{
+      margin:0 0 8px;
+      color:var(--green-900);
+      font-size:28px;
+      letter-spacing:-.06em;
+      line-height:1;
+    }
+
+    .modal p{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-weight:650;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .toast{
+      position:fixed;
+      left:14px;
+      right:14px;
+      bottom:calc(var(--bottom-nav) + env(safe-area-inset-bottom) + 12px);
+      z-index:80;
+      display:none;
+      padding:14px 16px;
+      color:#fff;
+      background:var(--green-900);
+      border-radius:18px;
+      box-shadow:0 20px 60px rgba(0,0,0,.22);
+      font-size:13px;
+      font-weight:900;
+      max-width:492px;
+      margin:auto;
+    }
+
+    .toast.show{display:block;animation:toastIn .18s ease}
+    @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    .bottom-nav{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:45;
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+      background:rgba(255,255,255,.92);
+      border-top:1px solid var(--line);
+      backdrop-filter:blur(18px);
+      box-shadow:0 -14px 35px rgba(6,61,44,.10);
+    }
+
+    .bottom-nav-inner{
+      max-width:520px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:5px;
+    }
+
+    .nav-btn{
+      border:0;
+      border-radius:17px;
+      min-height:60px;
+      background:transparent;
+      color:var(--muted);
+      display:grid;
+      place-items:center;
+      align-content:center;
+      gap:3px;
+      font-size:10px;
+      font-weight:950;
+    }
+
+    .nav-btn .nav-ico{font-size:20px;line-height:1}
+    .nav-btn.active{
+      background:linear-gradient(135deg,var(--green-900),var(--green-600));
+      color:#fff;
+      box-shadow:0 12px 26px rgba(8,118,78,.2);
+    }
+
+    .footer{
+      color:var(--green-800);
+      text-align:center;
+      font-size:11px;
+      font-weight:900;
+      padding:4px 0 14px;
+    }
+
+
+    .back-home-btn{
+      width:100%;
+      min-height:48px;
+      border:1px solid rgba(8,118,78,.22);
+      border-radius:16px;
+      background:rgba(255,255,255,.94);
+      color:var(--green-900);
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      box-shadow:0 10px 24px rgba(6,61,44,.07);
+      margin:-4px 0 14px;
+    }
+
+    .back-home-btn:active{transform:scale(.99)}
+
+    .hidden{display:none!important}
+
+    @media(max-width:370px){
+      .app{padding-left:10px;padding-right:10px}
+      .hero-card h1{font-size:32px}
+      .page-title h2{font-size:28px}
+      .row-2,.btn-row-2,.stats-grid,.record-mini-grid{grid-template-columns:1fr}
+      .bottom-nav-inner{gap:3px}
+      .nav-btn{font-size:9px;min-height:58px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand-mini">
+        <div class="brand-icon">🚚</div>
+        <div class="brand-title">
+          <strong>DispatcherDesk Mobile</strong>
+          <span>Expedição • CoopMetro</span>
+        </div>
+      </div>
+      <button class="user-chip" id="btnTrocarUsuario" type="button" title="Trocar usuário">👤 <span id="usuarioAtual">Usuário</span></button>
+    </header>
+
+    <main>
+      <section class="section active" id="tab-inicio">
+        <div class="hero-card">
+          <span class="eyebrow">Expedição rápida</span>
+          <h1>Solicitações na palma da mão.</h1>
+          <p>Registre retiradas, ambulâncias e pedidos de scheduling sem depender do computador durante a expedição.</p>
+        </div>
+
+        <div class="quick-actions">
+          <button class="shortcut-btn" data-goto="retirada" type="button">
+            <div class="shortcut-icon">📦</div>
+            <div><strong>Solicitar retirada</strong><span>Pacotes que precisam sair da rota ou voltar para tratativa.</span></div>
+          </button>
+          <button class="shortcut-btn" data-goto="ambulancia" type="button">
+            <div class="shortcut-icon">🚑</div>
+            <div><strong>Solicitar ambulância</strong><span>Apoio operacional, abertura e status da solicitação.</span></div>
+          </button>
+          <button class="shortcut-btn" data-goto="scheduling" type="button">
+            <div class="shortcut-icon">🗓️</div>
+            <div><strong>Ajuste de scheduling</strong><span>Pedido para o Mercado Livre adicionar veículos no sistema.</span></div>
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><small>Retiradas</small><strong id="statRetiradas">0</strong><span>Registros salvos hoje.</span></div>
+          <div class="stat-card"><small>Ambulâncias</small><strong id="statAmbulancias">0</strong><span>Solicitações e aberturas.</span></div>
+          <div class="stat-card"><small>Scheduling</small><strong id="statScheduling">0</strong><span>Pedidos de veículos.</span></div>
+          <div class="stat-card"><small>Pendentes</small><strong id="statPendentes">0</strong><span>Aguardando finalização.</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Últimos registros</h3><span>Os 5 lançamentos mais recentes.</span></div></div>
+          <div class="latest-list" id="ultimosRegistros"></div>
+        </div>
+      </section>
+
+      <section class="section" id="tab-retirada">
+        <div class="page-title">
+          <span class="eyebrow" style="color:var(--green-700)">Retirada de pacotes</span>
+          <h2>Solicitação de retirada</h2>
+          <p>Use para pacotes que precisam ser retirados da rota, corrigidos ou tratados pela expedição.</p>
+        </div>
+
+        <button class="back-home-btn" data-goto="inicio" type="button">← Voltar ao menu inicial</button>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Dados da retirada</h3><span>Preencha apenas o necessário e copie a mensagem.</span></div></div>
+          <div class="form-grid" id="formRetirada">
+            <div class="row-2">
+              <label>Data<input type="date" id="retData"></label>
+              <label>Ciclo<select id="retCiclo"><option>AM</option><option>PM</option><option>SD</option></select></label>
+            </div>
+            <label>SVC<input id="retSvc" placeholder="Ex: SGO3"></label>
+            <label>Doca<input id="retDoca" placeholder="Ex: Doca 12"></label>
+            <label>Rota<input id="retRota" placeholder="Ex: C5_PM1"></label>
+            <label>Driver<input id="retDriver" placeholder="Nome do motorista"></label>
+            <label>Quantidade de pacotes<input id="retQtd" type="number" min="0" inputmode="numeric" placeholder="Ex: 3"></label>
+            <label>IDs dos pacotes / tracking<textarea id="retIds" placeholder="Cole ou digite os IDs dos pacotes"></textarea></label>
+            <label>Motivo<select id="retMotivo"><option>Pacote Faltante</option><option>Estouro de Cubagem</option><option>Não cabe no Veículo</option><option>Avariado</option><option>Pacote de outra área</option><option>Erro de descontenerização</option><option>Retirada solicitada pelo Mercado Livre</option><option>Outro</option></select></label>
+            <label>Prioridade<select id="retPrioridade"><option>Normal</option><option>Alta</option><option>Urgente</option></select></label>
+            <label>Responsável / área solicitante<input id="retResponsavel" placeholder="Ex: Expedição / Mercado Livre"></label>
+            <label>Observação<textarea id="retObs" placeholder="Observações adicionais"></textarea></label>
+          </div>
+          <div class="btn-grid">
+            <button class="primary-btn" id="btnCopiarRetirada" type="button">Copiar mensagem</button>
+            <div class="btn-row-2">
+              <button class="ghost-btn" id="btnSalvarRetirada" type="button">Salvar</button>
+              <button class="danger-btn" id="btnLimparRetirada" type="button">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Prévia da mensagem</h3><span>Atualiza automaticamente.</span></div></div>
+          <div class="preview-box" id="previewRetirada"></div>
+        </div>
+      </section>
+
+      <section class="section" id="tab-ambulancia">
+        <div class="page-title">
+          <span class="eyebrow" style="color:var(--green-700)">Ambulância</span>
+          <h2>Solicitação ou abertura</h2>
+          <p>Registre o pedido de apoio e mantenha o histórico da tratativa.</p>
+        </div>
+
+        <button class="back-home-btn" data-goto="inicio" type="button">← Voltar ao menu inicial</button>
+
+        <div class="card">
+          <div class="switch-tabs">
+            <button class="active" type="button" id="ambModoSolicitacao">Solicitação</button>
+            <button type="button" id="ambModoAbertura">Abertura</button>
+          </div>
+          <div class="form-grid" id="formAmbulancia">
+            <div class="row-2">
+              <label>Semana<input id="ambSemana" type="number" min="1" inputmode="numeric" placeholder="Ex: 24"></label>
+              <label>Data<input type="date" id="ambData"></label>
+            </div>
+            <label>Transportadora<input id="ambTransportadora" value="CoopMetro"></label>
+            <label>SVC<input id="ambSvc" placeholder="Ex: SGO3"></label>
+            <label>Região<input id="ambRegiao" placeholder="Ex: Capuava e região"></label>
+            <label>Driver<input id="ambDriver" placeholder="Nome do motorista"></label>
+            <label>Rota original<input id="ambRotaOriginal" placeholder="Ex: 392407492"></label>
+            <label id="campoRotaAberta">Rota aberta<input id="ambRotaAberta" placeholder="Ex: 388665376"></label>
+            <div class="row-2">
+              <label>Pacotes pendentes<input id="ambPacotes" type="number" min="0" inputmode="numeric" placeholder="Ex: 70"></label>
+              <label>Paradas pendentes<input id="ambParadas" type="number" min="0" inputmode="numeric" placeholder="Ex: 45"></label>
+            </div>
+            <label>Tipo de apoio<select id="ambTipo"><option>Passeio</option><option>Fiorino</option><option>Utilitário</option><option>VUC</option><option>Ambulância</option></select></label>
+            <label>Motivo<select id="ambMotivo"><option>Alto volume</option><option>Região extensa</option><option>Condomínios</option><option>Comércio</option><option>Risco de estouro de ORH</option><option>Apoio solicitado pelo Mercado Livre</option><option>Driver com atraso operacional</option><option>Outro</option></select></label>
+            <label>Observação<textarea id="ambObs" placeholder="Observações adicionais"></textarea></label>
+          </div>
+          <div class="btn-grid">
+            <button class="primary-btn" id="btnCopiarAmbulancia" type="button">Copiar mensagem</button>
+            <button class="ghost-btn" id="btnSalvarAmbulancia" type="button">Salvar registro</button>
+            <div class="btn-row-2">
+              <button class="blue-btn" id="btnAmbAutorizada" type="button">Autorizada</button>
+              <button class="warn-btn" id="btnAmbPendente" type="button">Pendente</button>
+            </div>
+            <div class="btn-row-2">
+              <button class="danger-btn" id="btnAmbNegada" type="button">Não autorizada</button>
+              <button class="ghost-btn" id="btnLimparAmbulancia" type="button">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Prévia da mensagem</h3><span>Atualiza automaticamente.</span></div></div>
+          <div class="preview-box" id="previewAmbulancia"></div>
+        </div>
+      </section>
+
+      <section class="section" id="tab-scheduling">
+        <div class="page-title">
+          <span class="eyebrow" style="color:var(--green-700)">Scheduling</span>
+          <h2>Ajuste de Scheduling</h2>
+          <p>Pedido para o Mercado Livre adicionar veículos no sistema deles para atribuição dos motoristas.</p>
+        </div>
+
+        <button class="back-home-btn" data-goto="inicio" type="button">← Voltar ao menu inicial</button>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Adicionar veículos</h3><span>Adicione uma ou mais linhas. Spot sai sem SDD; Frota Fixa sai com SDD.</span></div></div>
+          <div class="form-grid" id="formScheduling">
+            <label>Transportadora<input id="schTransportadora" value="CoopMetro"></label>
+            <label>Dispatcher solicitante<input id="schDispatcher" placeholder="Nome do dispatcher"></label>
+            <div class="vehicle-help">Exemplo Spot: <strong>Utilitário 1 Un.</strong><br>Exemplo SDD/Frota Fixa: <strong>Utilitário SDD 1 Un.</strong></div>
+            <div class="vehicle-list" id="schVehicleList"></div>
+            <button class="ghost-btn" id="btnAdicionarVeiculoScheduling" type="button">+ Adicionar outro veículo</button>
+            <label>Observação<textarea id="schObs" placeholder="Opcional. Ex: adicionar para ciclo PM / SGO3"></textarea></label>
+          </div>
+          <div class="btn-grid">
+            <button class="primary-btn" id="btnCopiarScheduling" type="button">Copiar mensagem</button>
+            <div class="btn-row-2">
+              <button class="ghost-btn" id="btnSalvarScheduling" type="button">Salvar</button>
+              <button class="danger-btn" id="btnLimparScheduling" type="button">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Prévia da mensagem</h3><span>Formato simples para envio ao Mercado Livre.</span></div></div>
+          <div class="preview-box" id="previewScheduling"></div>
+        </div>
+      </section>
+
+      <section class="section" id="tab-historico">
+        <div class="page-title">
+          <span class="eyebrow" style="color:var(--green-700)">Histórico</span>
+          <h2>Registros salvos</h2>
+          <p>Consulte, copie, finalize, exporte ou exclua as solicitações feitas no celular.</p>
+        </div>
+
+        <button class="back-home-btn" data-goto="inicio" type="button">← Voltar ao menu inicial</button>
+
+        <div class="card">
+          <div class="card-title"><div><h3>Filtros</h3><span>Encontre rapidamente por tipo, status, rota ou driver.</span></div></div>
+          <div class="filters">
+            <select id="filtroTipo"><option value="todos">Todos os tipos</option><option value="retirada">Retirada</option><option value="ambulancia">Ambulância</option><option value="scheduling">Scheduling</option></select>
+            <select id="filtroStatus"><option value="todos">Todos os status</option><option value="pendente">Pendente</option><option value="autorizada">Autorizada</option><option value="nao_autorizada">Não autorizada</option><option value="finalizado">Finalizado</option></select>
+            <input id="filtroBusca" placeholder="Buscar por rota, driver, veículo...">
+          </div>
+          <div class="btn-grid">
+            <div class="btn-row-2">
+              <button class="ghost-btn" id="btnExportar" type="button">Exportar JSON</button>
+              <label class="ghost-btn" style="display:grid;place-items:center;text-align:center;min-height:52px">Importar JSON<input id="inputImportar" type="file" accept="application/json" class="hidden"></label>
+            </div>
+            <button class="danger-btn" id="btnLimparHistorico" type="button">Limpar histórico</button>
+          </div>
+        </div>
+
+        <div class="history-list" id="historicoLista"></div>
+      </section>
+    </main>
+
+    <div class="footer">Feito por Edinan Magalhães • DispatcherDesk Mobile Expedição</div>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Menu principal">
+    <div class="bottom-nav-inner">
+      <button class="nav-btn active" data-tab="inicio" type="button"><span class="nav-ico">🏠</span><span>Início</span></button>
+      <button class="nav-btn" data-tab="retirada" type="button"><span class="nav-ico">📦</span><span>Retirada</span></button>
+      <button class="nav-btn" data-tab="ambulancia" type="button"><span class="nav-ico">🚑</span><span>Ambulância</span></button>
+      <button class="nav-btn" data-tab="scheduling" type="button"><span class="nav-ico">🗓️</span><span>Scheduling</span></button>
+      <button class="nav-btn" data-tab="historico" type="button"><span class="nav-ico">📋</span><span>Histórico</span></button>
+    </div>
+  </nav>
+
+  <div class="modal-overlay" id="modalUsuario">
+    <div class="modal">
+      <h3>Identificação</h3>
+      <p>Informe o nome do dispatcher para sair nos registros e nas mensagens geradas.</p>
+      <label>Nome do dispatcher<input id="inputUsuario" placeholder="Ex: Edinan"></label>
+      <div class="btn-grid">
+        <button class="primary-btn" id="btnSalvarUsuario" type="button">Entrar no sistema</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_REGISTROS = 'dispatcherdesk_mobile_expedicao_registros_v1';
+    const STORAGE_USUARIO = 'dispatcherdesk_mobile_expedicao_usuario_v1';
+
+    const state = {
+      registros: [],
+      usuario: '',
+      ambModo: 'solicitacao',
+      ultimoStatusAmb: 'pendente',
+      editingId: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const qs = (sel, root=document) => root.querySelector(sel);
+    const qsa = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+    function hojeISO(){
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off * 60000);
+      return local.toISOString().slice(0,10);
+    }
+
+    function agoraBR(){
+      return new Date().toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short' });
+    }
+
+    function formatDateBR(iso){
+      if(!iso) return '';
+      const [y,m,d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function uid(){
+      return 'reg_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8);
+    }
+
+    function val(id){ return ($(id)?.value || '').trim(); }
+    function setVal(id, value){ if($(id)) $(id).value = value ?? ''; }
+    function safe(v){ return v && String(v).trim() ? String(v).trim() : '-'; }
+
+    function mostrarToast(msg){
+      const toast = $('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=> toast.classList.remove('show'), 2300);
+    }
+
+    async function copiarTexto(texto){
+      try{
+        await navigator.clipboard.writeText(texto);
+        mostrarToast('Mensagem copiada com sucesso.');
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        mostrarToast('Mensagem copiada.');
+      }
+    }
+
+    function carregar(){
+      try{ state.registros = JSON.parse(localStorage.getItem(STORAGE_REGISTROS) || '[]'); }
+      catch(e){ state.registros = []; }
+      state.usuario = localStorage.getItem(STORAGE_USUARIO) || '';
+      if(!state.usuario){ $('modalUsuario').classList.add('show'); }
+      atualizarUsuarioUI();
+    }
+
+    function persistir(){
+      localStorage.setItem(STORAGE_REGISTROS, JSON.stringify(state.registros));
+      renderAll();
+    }
+
+    function atualizarUsuarioUI(){
+      $('usuarioAtual').textContent = state.usuario || 'Usuário';
+      if(!val('schDispatcher')) setVal('schDispatcher', state.usuario || '');
+    }
+
+    function navegar(tab){
+      qsa('.section').forEach(s => s.classList.remove('active'));
+      qsa('.nav-btn').forEach(b => b.classList.remove('active'));
+      $(`tab-${tab}`).classList.add('active');
+      qs(`.nav-btn[data-tab="${tab}"]`)?.classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+      renderAll();
+    }
+
+    function tipoLabel(tipo){
+      return tipo === 'retirada' ? 'Retirada' : tipo === 'ambulancia' ? 'Ambulância' : 'Scheduling';
+    }
+
+    function statusLabel(status){
+      const map = {pendente:'Pendente', autorizada:'Autorizada', nao_autorizada:'Não autorizada', finalizado:'Finalizado'};
+      return map[status] || status || 'Pendente';
+    }
+
+    function statusClass(status){
+      if(status === 'finalizado') return 'done';
+      if(status === 'nao_autorizada') return 'denied';
+      if(status === 'autorizada') return 'blue';
+      return 'pending';
+    }
+
+    function dadosBase(tipo, status, dados, mensagem){
+      return {
+        id: state.editingId || uid(),
+        tipo,
+        status: status || 'pendente',
+        criadoEm: state.editingId ? (state.registros.find(r => r.id === state.editingId)?.criadoEm || new Date().toISOString()) : new Date().toISOString(),
+        atualizadoEm: new Date().toISOString(),
+        usuario: state.usuario || val('schDispatcher') || 'Não informado',
+        dados,
+        mensagem
+      };
+    }
+
+    function salvarRegistro(registro){
+      if(state.editingId){
+        const idx = state.registros.findIndex(r => r.id === state.editingId);
+        if(idx >= 0) state.registros[idx] = registro;
+        state.editingId = null;
+        mostrarToast('Registro atualizado.');
+      }else{
+        state.registros.unshift(registro);
+        mostrarToast('Registro salvo no histórico.');
+      }
+      persistir();
+    }
+
+    function gerarMensagemRetirada(){
+      return `📦 SOLICITAÇÃO DE RETIRADA DE PACOTES\n\nData: ${safe(formatDateBR(val('retData')))}\nSVC: ${safe(val('retSvc'))}\nDoca: ${safe(val('retDoca'))}\nCiclo: ${safe(val('retCiclo'))}\nRota: ${safe(val('retRota'))}\nDriver: ${safe(val('retDriver'))}\nQuantidade de pacotes: ${safe(val('retQtd'))}\nIDs dos pacotes: ${safe(val('retIds'))}\nMotivo: ${safe(val('retMotivo'))}\nPrioridade: ${safe(val('retPrioridade'))}\nResponsável/área solicitante: ${safe(val('retResponsavel'))}\nObservação: ${safe(val('retObs'))}\nDispatcher solicitante: ${safe(state.usuario)}\n\nSolicito a retirada dos pacotes informados acima para correção operacional e tratativa junto à expedição.`;
+    }
+
+    function dadosRetirada(){
+      return {
+        data: val('retData'), svc: val('retSvc'), doca: val('retDoca'), ciclo: val('retCiclo'), rota: val('retRota'), driver: val('retDriver'), qtd: val('retQtd'), ids: val('retIds'), motivo: val('retMotivo'), prioridade: val('retPrioridade'), responsavel: val('retResponsavel'), obs: val('retObs')
+      };
+    }
+
+    function gerarMensagemAmbulancia(){
+      const abertura = state.ambModo === 'abertura';
+      if(abertura){
+        return `🚑 ABERTURA DE AMBULÂNCIA\n\nSemana: ${safe(val('ambSemana'))}\nData: ${safe(formatDateBR(val('ambData')))}\nTransportadora: ${safe(val('ambTransportadora'))}\nSVC: ${safe(val('ambSvc'))}\nRegião: ${safe(val('ambRegiao'))}\nDriver: ${safe(val('ambDriver'))}\nRota original: ${safe(val('ambRotaOriginal'))}\nRota aberta: ${safe(val('ambRotaAberta'))}\nPacotes pendentes atualizados: ${safe(val('ambPacotes'))}\nParadas pendentes: ${safe(val('ambParadas'))}\nTipo de apoio: ${safe(val('ambTipo'))}\nMotivo: ${safe(val('ambMotivo'))}\nObservação: ${safe(val('ambObs'))}\nDispatcher solicitante: ${safe(state.usuario)}\n\nSolicito abertura da ambulância conforme dados atualizados acima.`;
+      }
+      return `🚑 SOLICITAÇÃO DE AMBULÂNCIA\n\nSemana: ${safe(val('ambSemana'))}\nData: ${safe(formatDateBR(val('ambData')))}\nTransportadora: ${safe(val('ambTransportadora'))}\nSVC: ${safe(val('ambSvc'))}\nRegião: ${safe(val('ambRegiao'))}\nDriver: ${safe(val('ambDriver'))}\nRota original: ${safe(val('ambRotaOriginal'))}\nPacotes pendentes: ${safe(val('ambPacotes'))}\nParadas pendentes: ${safe(val('ambParadas'))}\nTipo de apoio: ${safe(val('ambTipo'))}\nMotivo: ${safe(val('ambMotivo'))}\nObservação: ${safe(val('ambObs'))}\nDispatcher solicitante: ${safe(state.usuario)}\n\nSolicito apoio de ambulância para mitigar risco operacional, reduzir pendências e preservar a performance da rota.`;
+    }
+
+    function dadosAmbulancia(){
+      return {
+        modo: state.ambModo, semana: val('ambSemana'), data: val('ambData'), transportadora: val('ambTransportadora'), svc: val('ambSvc'), regiao: val('ambRegiao'), driver: val('ambDriver'), rotaOriginal: val('ambRotaOriginal'), rotaAberta: val('ambRotaAberta'), pacotes: val('ambPacotes'), paradas: val('ambParadas'), tipoApoio: val('ambTipo'), motivo: val('ambMotivo'), obs: val('ambObs')
+      };
+    }
+
+    function getSchedulingVeiculos(){
+      return qsa('.sch-vehicle-row').map(row => ({
+        modalidade: qs('.sch-modalidade', row)?.value || 'Spot',
+        tipoVeiculo: qs('.sch-tipo-veiculo', row)?.value || 'Utilitário',
+        qtdFretes: (qs('.sch-qtd-fretes', row)?.value || '').trim()
+      }));
+    }
+
+    function formatarLinhaVeiculoScheduling(v){
+      const tipo = safe(v.tipoVeiculo);
+      const qtd = safe(v.qtdFretes);
+      return v.modalidade === 'SDD' ? `${tipo} SDD ${qtd} Un.` : `${tipo} ${qtd} Un.`;
+    }
+
+    function renderSchedulingVeiculos(veiculos){
+      const lista = $('schVehicleList');
+      if(!lista) return;
+      const dados = (veiculos && veiculos.length) ? veiculos : [{modalidade:'Spot', tipoVeiculo:'Utilitário', qtdFretes:''}];
+      lista.innerHTML = dados.map((v, i) => `
+        <div class="vehicle-card sch-vehicle-row">
+          <div class="vehicle-card-head">
+            <span>Veículo ${i + 1}</span>
+            ${dados.length > 1 ? `<button class="vehicle-remove" data-remove-veiculo="${i}" type="button">Remover</button>` : ''}
+          </div>
+          <label>Modalidade
+            <select class="sch-modalidade">
+              <option value="Spot" ${v.modalidade !== 'SDD' ? 'selected' : ''}>Spot - Veículo Normal</option>
+              <option value="SDD" ${v.modalidade === 'SDD' ? 'selected' : ''}>SDD - Frota Fixa</option>
+            </select>
+          </label>
+          <label>Tipo de veículo
+            <select class="sch-tipo-veiculo">
+              <option ${v.tipoVeiculo === 'Utilitário' ? 'selected' : ''}>Utilitário</option>
+              <option ${v.tipoVeiculo === 'Passeio' ? 'selected' : ''}>Passeio</option>
+              <option ${v.tipoVeiculo === 'VUC' ? 'selected' : ''}>VUC</option>
+            </select>
+          </label>
+          <label>Quantidade na frente deste veículo
+            <input class="sch-qtd-fretes" type="number" min="1" inputmode="numeric" placeholder="Ex: 1" value="${escapeHTML(v.qtdFretes || '')}">
+          </label>
+        </div>
+      `).join('');
+
+      qsa('input, select', lista).forEach(el => {
+        el.addEventListener('input', atualizarPreviews);
+        el.addEventListener('change', atualizarPreviews);
+      });
+      qsa('[data-remove-veiculo]', lista).forEach(btn => {
+        btn.onclick = () => {
+          const atual = getSchedulingVeiculos();
+          atual.splice(Number(btn.dataset.removeVeiculo), 1);
+          renderSchedulingVeiculos(atual);
+          atualizarPreviews();
+        };
+      });
+      atualizarPreviews();
+    }
+
+    function adicionarVeiculoScheduling(){
+      const atual = getSchedulingVeiculos();
+      atual.push({modalidade:'Spot', tipoVeiculo:'Utilitário', qtdFretes:''});
+      renderSchedulingVeiculos(atual);
+    }
+
+    function gerarMensagemScheduling(){
+      const linhas = getSchedulingVeiculos().filter(v => v.tipoVeiculo || v.qtdFretes).map(formatarLinhaVeiculoScheduling);
+      return `🗓️ AJUSTE DE SCHEDULING\n\nTransportadora: ${safe(val('schTransportadora'))}\nSolicitação: Adicionar Veículos\nDispatcher solicitante: ${safe(val('schDispatcher') || state.usuario)}\nVeículos solicitados:\n${linhas.length ? linhas.map(l => `- ${l}`).join('\n') : '-'}\nObservação: ${safe(val('schObs'))}`;
+    }
+
+    function dadosScheduling(){
+      return {
+        transportadora: val('schTransportadora'),
+        dispatcher: val('schDispatcher'),
+        veiculos: getSchedulingVeiculos(),
+        obs: val('schObs')
+      };
+    }
+
+    function atualizarPreviews(){
+      $('previewRetirada').textContent = gerarMensagemRetirada();
+      $('previewAmbulancia').textContent = gerarMensagemAmbulancia();
+      $('previewScheduling').textContent = gerarMensagemScheduling();
+    }
+
+    function limparRetirada(){
+      ['retSvc','retRota','retDriver','retQtd','retIds','retResponsavel','retObs'].forEach(id=>setVal(id,''));
+      setVal('retData', hojeISO()); setVal('retCiclo','AM'); setVal('retMotivo','Pacote Faltante'); setVal('retPrioridade','Normal');
+      state.editingId = null; atualizarPreviews();
+    }
+
+    function limparAmbulancia(){
+      ['ambSemana','ambSvc','ambRegiao','ambDriver','ambRotaOriginal','ambRotaAberta','ambPacotes','ambParadas','ambObs'].forEach(id=>setVal(id,''));
+      setVal('ambData', hojeISO()); setVal('ambTransportadora','CoopMetro'); setVal('ambTipo','Passeio'); setVal('ambMotivo','Alto volume');
+      state.ultimoStatusAmb = 'pendente'; state.editingId = null; atualizarPreviews();
+    }
+
+    function limparScheduling(){
+      setVal('schTransportadora','CoopMetro'); setVal('schDispatcher', state.usuario || ''); setVal('schObs','');
+      renderSchedulingVeiculos([{modalidade:'Spot', tipoVeiculo:'Utilitário', qtdFretes:''}]);
+      state.editingId = null; atualizarPreviews();
+    }
+
+    function setAmbModo(modo){
+      state.ambModo = modo;
+      $('ambModoSolicitacao').classList.toggle('active', modo === 'solicitacao');
+      $('ambModoAbertura').classList.toggle('active', modo === 'abertura');
+      $('campoRotaAberta').classList.toggle('hidden', modo !== 'abertura');
+      atualizarPreviews();
+    }
+
+    function salvarRetirada(){
+      const mensagem = gerarMensagemRetirada();
+      salvarRegistro(dadosBase('retirada','pendente',dadosRetirada(),mensagem));
+      limparRetirada();
+    }
+
+    function salvarAmbulancia(status = state.ultimoStatusAmb || 'pendente'){
+      const mensagem = gerarMensagemAmbulancia();
+      salvarRegistro(dadosBase('ambulancia',status,dadosAmbulancia(),mensagem));
+      limparAmbulancia();
+    }
+
+    function salvarScheduling(){
+      const mensagem = gerarMensagemScheduling();
+      salvarRegistro(dadosBase('scheduling','pendente',dadosScheduling(),mensagem));
+      limparScheduling();
+    }
+
+    function editarRegistro(id){
+      const reg = state.registros.find(r => r.id === id);
+      if(!reg) return;
+      state.editingId = id;
+      const d = reg.dados || {};
+      if(reg.tipo === 'retirada'){
+        setVal('retData', d.data || hojeISO()); setVal('retSvc', d.svc); setVal('retCiclo', d.ciclo || 'AM'); setVal('retRota', d.rota); setVal('retDriver', d.driver); setVal('retQtd', d.qtd); setVal('retIds', d.ids); setVal('retMotivo', d.motivo || 'Pacote Faltante'); setVal('retPrioridade', d.prioridade || 'Normal'); setVal('retResponsavel', d.responsavel); setVal('retObs', d.obs);
+        navegar('retirada');
+      }
+      if(reg.tipo === 'ambulancia'){
+        setAmbModo(d.modo || 'solicitacao'); setVal('ambSemana', d.semana); setVal('ambData', d.data || hojeISO()); setVal('ambTransportadora', d.transportadora || 'CoopMetro'); setVal('ambSvc', d.svc); setVal('ambRegiao', d.regiao); setVal('ambDriver', d.driver); setVal('ambRotaOriginal', d.rotaOriginal); setVal('ambRotaAberta', d.rotaAberta); setVal('ambPacotes', d.pacotes); setVal('ambParadas', d.paradas); setVal('ambTipo', d.tipoApoio || 'Passeio'); setVal('ambMotivo', d.motivo || 'Alto volume'); setVal('ambObs', d.obs); state.ultimoStatusAmb = reg.status || 'pendente';
+        navegar('ambulancia');
+      }
+      if(reg.tipo === 'scheduling'){
+        setVal('schTransportadora', d.transportadora || 'CoopMetro'); setVal('schDispatcher', d.dispatcher || state.usuario); setVal('schObs', d.obs);
+        const veiculos = Array.isArray(d.veiculos) && d.veiculos.length ? d.veiculos : [{modalidade:'Spot', tipoVeiculo:d.tipoVeiculo || 'Utilitário', qtdFretes:d.qtdFretes || ''}];
+        renderSchedulingVeiculos(veiculos);
+        navegar('scheduling');
+      }
+      atualizarPreviews();
+      mostrarToast('Registro carregado para edição. Ao salvar, ele será atualizado.');
+    }
+
+    function excluirRegistro(id){
+      if(!confirm('Excluir este registro?')) return;
+      state.registros = state.registros.filter(r => r.id !== id);
+      persistir();
+      mostrarToast('Registro excluído.');
+    }
+
+    function alterarStatus(id, status){
+      const reg = state.registros.find(r => r.id === id);
+      if(!reg) return;
+      reg.status = status;
+      reg.atualizadoEm = new Date().toISOString();
+      persistir();
+      mostrarToast('Status atualizado.');
+    }
+
+    function renderRecord(reg, compact=false){
+      const d = reg.dados || {};
+      const rota = d.rota || d.rotaOriginal || '-';
+      const driver = d.driver || d.dispatcher || reg.usuario || '-';
+      const resumoScheduling = Array.isArray(d.veiculos) && d.veiculos.length ? d.veiculos.map(formatarLinhaVeiculoScheduling).join(' | ') : `${d.tipoVeiculo || '-'} • ${d.qtdFretes || '-'} frete(s)`;
+      const extra = reg.tipo === 'scheduling' ? resumoScheduling : reg.tipo === 'ambulancia' ? `${d.regiao || '-'} • ${d.tipoApoio || '-'}` : `${d.qtd || '-'} pacote(s)`;
+      const created = new Date(reg.criadoEm).toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
+      const card = document.createElement('div');
+      card.className = 'record-card';
+      card.innerHTML = `
+        <div class="record-head">
+          <div><strong>${tipoLabel(reg.tipo)}</strong><span>${created} • ${safe(reg.usuario)}</span></div>
+          <span class="badge ${statusClass(reg.status)}">${statusLabel(reg.status)}</span>
+        </div>
+        <div class="record-mini-grid">
+          <div class="record-info"><small>Rota / Pedido</small><span>${safe(rota)}</span></div>
+          <div class="record-info"><small>Driver / Solicitante</small><span>${safe(driver)}</span></div>
+          <div class="record-info"><small>SVC / Transp.</small><span>${safe(d.svc || d.transportadora)}</span></div>
+          <div class="record-info"><small>Resumo</small><span>${safe(extra)}</span></div>
+        </div>
+        ${compact ? '' : `<div class="record-message">${escapeHTML(reg.mensagem || '')}</div>`}
+        <div class="record-actions">
+          <button class="small-btn dark" data-copy="${reg.id}" type="button">Copiar</button>
+          <button class="small-btn" data-edit="${reg.id}" type="button">Editar</button>
+          <button class="small-btn warn" data-done="${reg.id}" type="button">Finalizar</button>
+          <button class="small-btn danger" data-delete="${reg.id}" type="button">Excluir</button>
+        </div>`;
+      return card;
+    }
+
+    function escapeHTML(str){
+      return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    }
+
+    function attachRecordActions(root){
+      qsa('[data-copy]', root).forEach(b => b.onclick = () => copiarTexto(state.registros.find(r => r.id === b.dataset.copy)?.mensagem || ''));
+      qsa('[data-edit]', root).forEach(b => b.onclick = () => editarRegistro(b.dataset.edit));
+      qsa('[data-delete]', root).forEach(b => b.onclick = () => excluirRegistro(b.dataset.delete));
+      qsa('[data-done]', root).forEach(b => b.onclick = () => alterarStatus(b.dataset.done, 'finalizado'));
+    }
+
+    function renderUltimos(){
+      const box = $('ultimosRegistros');
+      box.innerHTML = '';
+      const regs = state.registros.slice(0,5);
+      if(!regs.length){ box.innerHTML = '<div class="empty-state">Nenhum registro ainda. Use os botões acima para começar.</div>'; return; }
+      regs.forEach(r => box.appendChild(renderRecord(r, true)));
+      attachRecordActions(box);
+    }
+
+    function renderHistorico(){
+      const box = $('historicoLista');
+      box.innerHTML = '';
+      const tipo = val('filtroTipo') || 'todos';
+      const status = val('filtroStatus') || 'todos';
+      const busca = (val('filtroBusca') || '').toLowerCase();
+      let regs = state.registros.filter(r => {
+        if(tipo !== 'todos' && r.tipo !== tipo) return false;
+        if(status !== 'todos' && r.status !== status) return false;
+        if(busca){
+          const hay = JSON.stringify(r).toLowerCase();
+          return hay.includes(busca);
+        }
+        return true;
+      });
+      if(!regs.length){ box.innerHTML = '<div class="empty-state">Nenhum registro encontrado com os filtros atuais.</div>'; return; }
+      regs.forEach(r => box.appendChild(renderRecord(r, false)));
+      attachRecordActions(box);
+    }
+
+    function renderStats(){
+      const today = hojeISO();
+      const regsToday = state.registros.filter(r => (r.criadoEm || '').slice(0,10) === today);
+      $('statRetiradas').textContent = regsToday.filter(r => r.tipo === 'retirada').length;
+      $('statAmbulancias').textContent = regsToday.filter(r => r.tipo === 'ambulancia').length;
+      $('statScheduling').textContent = regsToday.filter(r => r.tipo === 'scheduling').length;
+      $('statPendentes').textContent = state.registros.filter(r => r.status === 'pendente').length;
+    }
+
+    function renderAll(){
+      atualizarPreviews();
+      renderStats();
+      renderUltimos();
+      renderHistorico();
+    }
+
+    function exportarJSON(){
+      const payload = { app:'DispatcherDesk Mobile Expedição', exportadoEm:new Date().toISOString(), registros:state.registros };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `dispatcherdesk-mobile-expedicao-${hojeISO()}.json`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(a.href);
+      mostrarToast('Exportação gerada.');
+    }
+
+    function importarJSON(file){
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = JSON.parse(reader.result);
+          const regs = Array.isArray(data) ? data : data.registros;
+          if(!Array.isArray(regs)) throw new Error('Formato inválido');
+          state.registros = [...regs, ...state.registros];
+          persistir();
+          mostrarToast('Registros importados.');
+        }catch(e){ mostrarToast('Arquivo inválido.'); }
+      };
+      reader.readAsText(file);
+    }
+
+    function limparHistorico(){
+      if(!state.registros.length){ mostrarToast('Histórico já está vazio.'); return; }
+      if(!confirm('Tem certeza que deseja limpar todo o histórico?')) return;
+      state.registros = [];
+      persistir();
+      mostrarToast('Histórico limpo.');
+    }
+
+    function initEvents(){
+      qsa('.nav-btn').forEach(b => b.addEventListener('click', () => navegar(b.dataset.tab)));
+      qsa('[data-goto]').forEach(b => b.addEventListener('click', () => navegar(b.dataset.goto)));
+
+      $('btnTrocarUsuario').onclick = () => { setVal('inputUsuario', state.usuario); $('modalUsuario').classList.add('show'); };
+      $('btnSalvarUsuario').onclick = () => {
+        const nome = val('inputUsuario');
+        if(!nome){ mostrarToast('Informe o nome do dispatcher.'); return; }
+        state.usuario = nome;
+        localStorage.setItem(STORAGE_USUARIO, nome);
+        $('modalUsuario').classList.remove('show');
+        atualizarUsuarioUI();
+        atualizarPreviews();
+        mostrarToast('Usuário salvo.');
+      };
+
+      $('ambModoSolicitacao').onclick = () => setAmbModo('solicitacao');
+      $('ambModoAbertura').onclick = () => setAmbModo('abertura');
+
+      qsa('input, textarea, select').forEach(el => el.addEventListener('input', atualizarPreviews));
+      qsa('select').forEach(el => el.addEventListener('change', atualizarPreviews));
+
+      $('btnCopiarRetirada').onclick = () => copiarTexto(gerarMensagemRetirada());
+      $('btnSalvarRetirada').onclick = salvarRetirada;
+      $('btnLimparRetirada').onclick = limparRetirada;
+
+      $('btnCopiarAmbulancia').onclick = () => copiarTexto(gerarMensagemAmbulancia());
+      $('btnSalvarAmbulancia').onclick = () => salvarAmbulancia('pendente');
+      $('btnAmbAutorizada').onclick = () => { state.ultimoStatusAmb = 'autorizada'; salvarAmbulancia('autorizada'); };
+      $('btnAmbPendente').onclick = () => { state.ultimoStatusAmb = 'pendente'; salvarAmbulancia('pendente'); };
+      $('btnAmbNegada').onclick = () => { state.ultimoStatusAmb = 'nao_autorizada'; salvarAmbulancia('nao_autorizada'); };
+      $('btnLimparAmbulancia').onclick = limparAmbulancia;
+
+      $('btnAdicionarVeiculoScheduling').onclick = adicionarVeiculoScheduling;
+      $('btnCopiarScheduling').onclick = () => copiarTexto(gerarMensagemScheduling());
+      $('btnSalvarScheduling').onclick = salvarScheduling;
+      $('btnLimparScheduling').onclick = limparScheduling;
+
+      $('filtroTipo').onchange = renderHistorico;
+      $('filtroStatus').onchange = renderHistorico;
+      $('filtroBusca').oninput = renderHistorico;
+      $('btnExportar').onclick = exportarJSON;
+      $('inputImportar').onchange = e => importarJSON(e.target.files[0]);
+      $('btnLimparHistorico').onclick = limparHistorico;
+    }
+
+    function initDefaults(){
+      ['retData','ambData'].forEach(id => setVal(id, hojeISO()));
+      setAmbModo('solicitacao');
+      renderSchedulingVeiculos([{modalidade:'Spot', tipoVeiculo:'Utilitário', qtdFretes:''}]);
+      atualizarUsuarioUI();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      carregar();
+      initDefaults();
+      initEvents();
+      renderAll();
+    });
+  </script>
+</body>
+</html>
