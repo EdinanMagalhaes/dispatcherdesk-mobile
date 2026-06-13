@@ -1,25 +1,31 @@
 {
   "name": "DispatcherDesk Mobile Expedição",
-  "short_name": "Expedição",
-  "description": "Solicitações rápidas de retirada, ambulância e scheduling para expedição.",
+  "short_name": "DD Expedição",
+  "description": "Ferramenta mobile para solicitações de retirada, ambulância e scheduling.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f5fbf8",
+  "background_color": "#052d21",
   "theme_color": "#063d2c",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
