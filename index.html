@@ -2,19 +2,19 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#063d2c" />
   <title>DispatcherDesk Mobile • Expedição</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#063d2c">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Expedição">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
   <!-- Ícones/PWA para adicionar à tela inicial no iPhone e Android -->
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#063d2c">
   <meta name="application-name" content="Expedição">
+  <meta name="apple-mobile-web-app-title" content="Expedição">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="icon" href="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%23063d2c'/%3E%3Ccircle cx='64' cy='64' r='42' fill='%230a9b65'/%3E%3Cpath d='M36 68h56l-12-18h-28z' fill='%23fff'/%3E%3Ccircle cx='50' cy='82' r='8' fill='%23063d2c'/%3E%3Ccircle cx='82' cy='82' r='8' fill='%23063d2c'/%3E%3C/svg%3E" type="image/svg+xml" />
   <style>
@@ -386,6 +386,8 @@
       transition:.18s ease;
       font-weight:650;
       min-height:48px;
+      font-size:16px;
+      max-width:100%;
     }
 
     textarea{resize:vertical;min-height:98px;line-height:1.45}
@@ -398,8 +400,42 @@
 
     .row-2{
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
       gap:10px;
+    }
+
+    .retirada-date-cycle{
+      grid-template-columns:minmax(0,1.55fr) minmax(92px,.7fr);
+      align-items:end;
+    }
+
+    .retirada-date-cycle select{
+      padding-left:10px;
+      padding-right:8px;
+      text-align:center;
+      font-weight:950;
+    }
+
+    .fixed-mlp-pill{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 14px;
+      background:linear-gradient(180deg,#fff,var(--green-50));
+      color:var(--green-900);
+      font-size:13px;
+      font-weight:950;
+    }
+
+    .fixed-mlp-pill span{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:950;
     }
 
     .switch-tabs{
@@ -737,6 +773,58 @@
       .bottom-nav-inner{gap:3px}
       .nav-btn{font-size:9px;min-height:58px}
     }
+
+    @media(max-width:430px){
+      .app{
+        max-width:none;
+        padding-left:10px;
+        padding-right:10px;
+      }
+
+      .card{
+        padding:14px;
+        border-radius:22px;
+      }
+
+      .page-title h2{
+        font-size:26px;
+        line-height:1.02;
+      }
+
+      .retirada-date-cycle{
+        grid-template-columns:minmax(0,1.6fr) 86px;
+        gap:8px;
+      }
+
+      .retirada-date-cycle label{
+        min-width:0;
+      }
+
+      .retirada-date-cycle input,
+      .retirada-date-cycle select{
+        min-width:0;
+      }
+
+      .retirada-date-cycle select{
+        padding-left:6px;
+        padding-right:4px;
+      }
+    }
+
+    @media(max-width:360px){
+      .app{
+        padding-left:8px;
+        padding-right:8px;
+      }
+
+      .retirada-date-cycle{
+        grid-template-columns:1fr;
+      }
+
+      .brand-title strong{font-size:14px}
+      .brand-icon{width:40px;height:40px;flex-basis:40px;border-radius:14px}
+    }
+
   </style>
 </head>
 <body>
@@ -800,10 +888,11 @@
         <div class="card">
           <div class="card-title"><div><h3>Dados da retirada</h3><span>Preencha apenas o necessário e copie a mensagem.</span></div></div>
           <div class="form-grid" id="formRetirada">
-            <div class="row-2">
+            <div class="row-2 retirada-date-cycle">
               <label>Data<input type="date" id="retData"></label>
               <label>Ciclo<select id="retCiclo"><option>AM</option><option>PM</option><option>SD</option></select></label>
             </div>
+            <div class="fixed-mlp-pill"><span>MLP</span><strong>COOPMETRO</strong></div>
             <label>SVC<input id="retSvc" placeholder="Ex: SGO3"></label>
             <label>Doca<input id="retDoca" placeholder="Ex: Doca 12"></label>
             <label>Rota<input id="retRota" placeholder="Ex: C5_PM1"></label>
@@ -1055,6 +1144,7 @@
     }
 
     function navegar(tab){
+      if(tab === 'retirada') garantirDataAtual('retData');
       qsa('.section').forEach(s => s.classList.remove('active'));
       qsa('.nav-btn').forEach(b => b.classList.remove('active'));
       $(`tab-${tab}`).classList.add('active');
@@ -1106,12 +1196,14 @@
     }
 
     function gerarMensagemRetirada(){
-      return `📦 SOLICITAÇÃO DE RETIRADA DE PACOTES\n\nData: ${safe(formatDateBR(val('retData')))}\nSVC: ${safe(val('retSvc'))}\nDoca: ${safe(val('retDoca'))}\nCiclo: ${safe(val('retCiclo'))}\nRota: ${safe(val('retRota'))}\nDriver: ${safe(val('retDriver'))}\nQuantidade de pacotes: ${safe(val('retQtd'))}\nIDs dos pacotes: ${safe(val('retIds'))}\nMotivo: ${safe(val('retMotivo'))}\nPrioridade: ${safe(val('retPrioridade'))}\nResponsável/área solicitante: ${safe(val('retResponsavel'))}\nObservação: ${safe(val('retObs'))}\nDispatcher solicitante: ${safe(state.usuario)}\n\nSolicito a retirada dos pacotes informados acima para correção operacional e tratativa junto à expedição.`;
+      const dataRetirada = val('retData') || hojeISO();
+      if(!val('retData')) setVal('retData', dataRetirada);
+      return `📦 SOLICITAÇÃO DE RETIRADA DE PACOTES\n\nData: ${safe(formatDateBR(dataRetirada))}\nMLP: COOPMETRO\nSVC: ${safe(val('retSvc'))}\nDoca: ${safe(val('retDoca'))}\nCiclo: ${safe(val('retCiclo'))}\nRota: ${safe(val('retRota'))}\nDriver: ${safe(val('retDriver'))}\nQuantidade de pacotes: ${safe(val('retQtd'))}\nIDs dos pacotes: ${safe(val('retIds'))}\nMotivo: ${safe(val('retMotivo'))}\nPrioridade: ${safe(val('retPrioridade'))}\nResponsável/área solicitante: ${safe(val('retResponsavel'))}\nObservação: ${safe(val('retObs'))}\nDispatcher solicitante: ${safe(state.usuario)}\n\nSolicito a retirada dos pacotes informados acima para correção operacional e tratativa junto à expedição.`;
     }
 
     function dadosRetirada(){
       return {
-        data: val('retData'), svc: val('retSvc'), doca: val('retDoca'), ciclo: val('retCiclo'), rota: val('retRota'), driver: val('retDriver'), qtd: val('retQtd'), ids: val('retIds'), motivo: val('retMotivo'), prioridade: val('retPrioridade'), responsavel: val('retResponsavel'), obs: val('retObs')
+        data: val('retData') || hojeISO(), mlp: 'COOPMETRO', svc: val('retSvc'), doca: val('retDoca'), ciclo: val('retCiclo'), rota: val('retRota'), driver: val('retDriver'), qtd: val('retQtd'), ids: val('retIds'), motivo: val('retMotivo'), prioridade: val('retPrioridade'), responsavel: val('retResponsavel'), obs: val('retObs')
       };
     }
 
@@ -1263,7 +1355,7 @@
       state.editingId = id;
       const d = reg.dados || {};
       if(reg.tipo === 'retirada'){
-        setVal('retData', d.data || hojeISO()); setVal('retSvc', d.svc); setVal('retCiclo', d.ciclo || 'AM'); setVal('retRota', d.rota); setVal('retDriver', d.driver); setVal('retQtd', d.qtd); setVal('retIds', d.ids); setVal('retMotivo', d.motivo || 'Pacote Faltante'); setVal('retPrioridade', d.prioridade || 'Normal'); setVal('retResponsavel', d.responsavel); setVal('retObs', d.obs);
+        setVal('retData', d.data || hojeISO()); setVal('retSvc', d.svc); setVal('retDoca', d.doca); setVal('retCiclo', d.ciclo || 'AM'); setVal('retRota', d.rota); setVal('retDriver', d.driver); setVal('retQtd', d.qtd); setVal('retIds', d.ids); setVal('retMotivo', d.motivo || 'Pacote Faltante'); setVal('retPrioridade', d.prioridade || 'Normal'); setVal('retResponsavel', d.responsavel); setVal('retObs', d.obs);
         navegar('retirada');
       }
       if(reg.tipo === 'ambulancia'){
